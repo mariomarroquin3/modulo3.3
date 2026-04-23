@@ -409,14 +409,28 @@ function ArchitectureSchema() {
   useEffect(() => {
     const interval = setInterval(() => {
       setMetrics(prev => {
-        const targetLoad = isStress ? 88 : 42;
-        const targetLat = isStress ? 45 : 8;
-        const targetThr = isStress ? 145 : 84.5;
+        const isSpike = Math.random() > 0.85; // 15% de probabilidad de pico
+        
+        let targetLoad = isStress ? 88 : 42;
+        let targetLat = isStress ? 45 : 8;
+        let targetThr = isStress ? 145 : 84.5;
+
+        if (isSpike) {
+          targetLoad += isStress ? 8 : 12;
+          targetLat += isStress ? 15 : 10;
+          targetThr += isStress ? 20 : 15;
+        }
+
+        const noiseLoad = (Math.random() * 2 - 1) * (isStress ? 2.5 : 0.8);
+        const noiseLat = (Math.random() * 2 - 1) * (isStress ? 3.5 : 0.5);
+        const noiseThr = (Math.random() * 2 - 1) * (isStress ? 4 : 1.2);
+
+        const easing = isSpike ? 0.25 : 0.1;
 
         return {
-          load: prev.load + (targetLoad - prev.load) * 0.1 + (Math.random() * 4 - 2),
-          latency: prev.latency + (targetLat - prev.latency) * 0.15 + (Math.random() * 2 - 1),
-          throughput: prev.throughput + (targetThr - prev.throughput) * 0.1 + (Math.random() * 4 - 2)
+          load: prev.load + (targetLoad - prev.load) * easing + noiseLoad,
+          latency: prev.latency + (targetLat - prev.latency) * easing + noiseLat,
+          throughput: prev.throughput + (targetThr - prev.throughput) * easing + noiseThr
         };
       });
     }, 1000);
@@ -547,6 +561,22 @@ function ArchitectureSchema() {
               )}
               <Cloud className={`mx-auto mb-4 w-10 h-10 transition-colors ${activeNode === 'aws' ? 'text-blue-400' : 'text-slate-500'}`} />
               <span className="text-lg font-bold text-white">AWS Cloud</span>
+              
+              <div className="flex flex-wrap justify-center gap-1.5 mt-4 min-h-[24px]">
+                <AnimatePresence>
+                  {Array.from({ length: isStress ? 12 : 4 }).map((_, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, scale: 0 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0 }}
+                      transition={{ duration: 0.3, delay: i * 0.05 }}
+                      className={`w-2.5 h-2.5 rounded-sm ${isStress ? 'bg-amber-500/60 border border-amber-500' : 'bg-blue-500/40 border border-blue-500/50'}`}
+                    />
+                  ))}
+                </AnimatePresence>
+              </div>
+
               <div className="mt-4 pt-4 border-t border-slate-800 flex justify-between text-xs font-mono text-slate-400">
                 <span>Load: <span className={isStress ? 'text-rose-400' : 'text-blue-400'}>{Math.round(metrics.load)}%</span></span>
                 <span>Nodes: <span className="text-slate-300">{isStress ? '12' : '4'}</span></span>
