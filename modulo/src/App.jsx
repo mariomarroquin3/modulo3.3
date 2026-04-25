@@ -29,11 +29,11 @@ const coverData = {
 const companyData = {
   name: "Telemóvil El Salvador, S.A. de C.V (TIGO)",
   address: "Edificio Campus Tigo Tuscania Corporate Business Park, Vía del Corso, Zaragoza.",
-  business: "Proveedor de telecomunicaciones. Proporciona banda ancha, datos móviles (5G/VoLTE), centros de datos y servicios cloud.",
+  business: "Sus servicios incluyen banda ancha fija, Internet, televisión de pago, datos móviles, voz, SMS, centros de datos, servicios en la nube y servicios financieros móviles.",
   interviewee: {
     name: "Yobani",
     role: "Ingeniero en Sistemas de Mediación",
-    goal: "Determinar la importancia de la operación, monitoreo y cumplimiento ISO en un centro de datos de alto rendimiento."
+    goal: "Determinar la importancia de la operación, el monitoreo y el cumplimiento de estándares internacionales (ISO) en la gestión de un centro de datos de alto rendimiento, para identificar las mejores prácticas de redundancia, seguridad y continuidad del negocio aplicadas en el sector de telecomunicaciones a través de la entrevista a un profesional experimentado."
   }
 };
 
@@ -410,7 +410,7 @@ function ArchitectureSchema() {
     const interval = setInterval(() => {
       setMetrics(prev => {
         const isSpike = Math.random() > 0.85; // 15% de probabilidad de pico
-        
+
         let targetLoad = isStress ? 88 : 42;
         let targetLat = isStress ? 45 : 8;
         let targetThr = isStress ? 145 : 84.5;
@@ -561,7 +561,7 @@ function ArchitectureSchema() {
               )}
               <Cloud className={`mx-auto mb-4 w-10 h-10 transition-colors ${activeNode === 'aws' ? 'text-blue-400' : 'text-slate-500'}`} />
               <span className="text-lg font-bold text-white">AWS Cloud</span>
-              
+
               <div className="flex flex-wrap justify-center gap-1.5 mt-4 min-h-[24px]">
                 <AnimatePresence>
                   {Array.from({ length: isStress ? 12 : 4 }).map((_, i) => (
@@ -844,6 +844,18 @@ export default function App() {
             <h4 className="text-white text-2xl font-black mb-4 tracking-wide">Certificación Objetivo</h4>
             <p className="text-xl text-slate-400 font-medium leading-relaxed">Infraestructura Nivel 4 (ISO/IEC 22237)</p>
             <p className="text-lg text-slate-500 mt-5 leading-relaxed">Disponibilidad del 99.995% anual.</p>
+          </motion.div>
+
+          <motion.div whileHover={{ scale: 1.02 }} className="bg-slate-900/40 p-12 rounded-[3.5rem] border border-white/5 backdrop-blur-md group shadow-2xl">
+            <Briefcase className="w-16 h-16 text-purple-400 mb-8 group-hover:scale-110 transition-transform" />
+            <h4 className="text-white text-2xl font-black mb-4 tracking-wide">Línea de Negocio</h4>
+            <p className="text-lg text-slate-400 leading-relaxed">{companyData.business}</p>
+          </motion.div>
+
+          <motion.div whileHover={{ scale: 1.02 }} className="bg-slate-900/40 p-12 rounded-[3.5rem] border border-white/5 backdrop-blur-md group shadow-2xl">
+            <TrendingUp className="w-16 h-16 text-rose-400 mb-8 group-hover:rotate-12 transition-transform" />
+            <h4 className="text-white text-2xl font-black mb-4 tracking-wide">Objetivo de Entrevista</h4>
+            <p className="text-lg text-slate-400 leading-relaxed">{companyData.interviewee.goal}</p>
           </motion.div>
         </div>
 
